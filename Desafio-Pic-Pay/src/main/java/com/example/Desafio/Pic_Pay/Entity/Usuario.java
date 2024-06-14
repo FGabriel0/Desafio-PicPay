@@ -1,6 +1,4 @@
 package com.example.Desafio.Pic_Pay.Entity;
-
-
 import java.math.BigDecimal;
 
 import com.example.Desafio.Pic_Pay.enums.UserTypes;
@@ -16,21 +14,21 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity(name = "usuario")
-@Table
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "id")
 public class Usuario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@Column(name = "nome")
 	private String nome;
 	
 	@Column(unique = true)
@@ -39,10 +37,8 @@ public class Usuario {
 	@Column(unique = true)
 	private String email;
 	
-	@Column
 	private BigDecimal balanca;
 	
-	@Column(name = "senha")
 	private String senha;
 	
 	@Enumerated(EnumType.STRING)

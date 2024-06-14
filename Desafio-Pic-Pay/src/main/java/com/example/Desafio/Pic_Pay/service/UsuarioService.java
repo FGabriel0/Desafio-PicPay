@@ -1,9 +1,13 @@
 package com.example.Desafio.Pic_Pay.service;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.Desafio.Pic_Pay.Entity.Usuario;
 import com.example.Desafio.Pic_Pay.controller.form.UsuarioForm;
+import com.example.Desafio.Pic_Pay.enums.UserTypes;
 import com.example.Desafio.Pic_Pay.exception.RegradeNegocioException;
 import com.example.Desafio.Pic_Pay.repository.UsuarioRepository;
 
@@ -14,14 +18,6 @@ public class UsuarioService {
 	private UsuarioRepository repository;
 
 	public Usuario salvarUsuario(UsuarioForm form) {
-		String emailExist = form.getEmail();
-		String cpfExist = form.getCpf();
-		
-		Usuario usuariosEmail = repository.existByEmail(emailExist)
-				.orElseThrow(() -> new RegradeNegocioException(("Email já existe")));
-		
-		Usuario usuarioCpf = repository.existByCpf(cpfExist)
-				.orElseThrow(() -> new RegradeNegocioException("Cpf já existe"));
 		
 		Usuario usuario = Usuario.builder()
 				.nome(form.getNome())
@@ -31,5 +27,27 @@ public class UsuarioService {
 				.build();
 		
 		return repository.save(usuario);
+	}
+	
+	
+	public void validarTransacao(Usuario user, BigDecimal value){
+		if(user.getTipo() == UserTypes.LOJISTAS) {
+			throw new RegradeNegocioException("Usuario Lojista não pode fazer transação");
+		}
+		
+		if(user.getBalanca().compareTo(value) < 0) {
+			throw new RegradeNegocioException("Usuario com saldo insuficiente");
+
+		}
+	}
+	
+	
+	public Usuario buscarPorId(Integer id) {
+		return repository.findById(id)
+				.orElseThrow(()-> new RegradeNegocioException("Usuario não encontrado"));
+	}
+	
+	public List<Usuario> getAll(){
+		return repository.findAll();
 	}
 }

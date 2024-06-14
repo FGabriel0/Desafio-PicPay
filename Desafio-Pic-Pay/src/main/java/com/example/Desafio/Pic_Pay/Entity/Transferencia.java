@@ -12,12 +12,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "tranferencia")
+@Entity
 @Table(name = "tranferencia")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Transferencia {
